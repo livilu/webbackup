@@ -1,0 +1,4 @@
+ftpuser="ftpusername"     # Ftp user name
+ftppass="ftpuserpassword" # Ftp password
+ftpip="1.2.3.4"           # Ftp server
+ftptd="somedir"           # Target folder

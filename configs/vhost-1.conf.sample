@@ -1,0 +1,6 @@
+sqluser=username
+sqlpass=password
+dbname=database
+charset=utf8
+backupname=vhost1
+backupfilesfrom=/path/to/htdocs/

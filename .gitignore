@@ -1,0 +1,7 @@
+config.sh
+configs/*.conf
+workdir/*
+*.log
+*.conf
+*.tmp
+bashlog/
