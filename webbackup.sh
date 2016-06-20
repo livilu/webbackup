@@ -28,7 +28,6 @@ lftp -u $ftpuser,$ftppass $ftpip/$ftptd <<EOF
 ls ./ > $ftpls
 bye
 EOF
-cat $ftpls
 
 # Find vhosts config; Include and make backup for each
 find $configdir -type f -name *\.conf | while read -r file; do
