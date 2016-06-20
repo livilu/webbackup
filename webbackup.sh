@@ -47,6 +47,7 @@ find $configdir -type f -name *\.conf | while read -r file; do
     cd $backupfilesfrom && tar -cpPzf $backupfilepath .
     printf "Copyng $backupname backups to ftp server $ftpip\n"
 
+# dirty code, but works
     ifdir=$(grep -E " $backupname$" $ftpls | awk '{print $3}')
     case "$ifdir" in
     "<DIR>" )
@@ -62,7 +63,8 @@ find $configdir -type f -name *\.conf | while read -r file; do
         printf "mkdir -p /$ftptd/$backupname\n" >> $ftpcmd
     ;;
     esac
-    #printf "mkdir -p /$ftptd/$backupname\n" >> $ftpcmd
+
+    #printf "mkdir -p -f /$ftptd/$backupname\n" >> $ftpcmd
     printf "cd /$ftptd/$backupname\n" >> $ftpcmd
     printf "put $backupfilepath\n" >> $ftpcmd
     printf "put $backupsqlpath\n" >> $ftpcmd
@@ -70,9 +72,7 @@ find $configdir -type f -name *\.conf | while read -r file; do
     printf "bye\n" >> $ftpcmd
     lftp -u $ftpuser,$ftppass $ftpip/$ftptd < $ftpcmd
     :>$ftpcmd
-    cat $ftp2ls
-    printf "\n"
-    
+
     # Rotation backups
     if [ -s $ftp2ls ]; then
         while read line; do
@@ -100,8 +100,6 @@ find $configdir -type f -name *\.conf | while read -r file; do
 done
 
 # end of script
-#ftpio "bye" "nowait"
-#exec {ftpin}>&-
 rm $ftpls
 rm $ftp2ls
 rm $ftpcmd
