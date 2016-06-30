@@ -1,0 +1,36 @@
+[root@websrv ~]# cd /tmp/
+[root@websrv tmp]# mkdir site1
+[root@websrv tmp]# cd site1/
+[root@websrv site1]# mkdir htdocs
+[root@websrv site1]# mkdir sql
+[root@websrv site1]# source /var/www/webbackup/config.sh
+[root@websrv site1]# lftp -u $ftpuser,$ftppass $ftpip/$ftptd
+cd ok, каталог=/WEBSRV
+lftp ftp@ftpserver:/WEBSRV>
+lftp ftp@ftpserver:/WEBSRV> ls
+06-28-16  03:33PM       <DIR>          site0
+06-28-16  03:33PM       <DIR>          site1
+06-28-16  03:33PM       <DIR>          site2
+lftp ftp@ftpserver:/WEBSRV> cd site1/
+lftp ftp@ftpserver:/WEBSRV/site1> ls
+06-21-16  12:00AM               243994 20160621.000001.sql.gz
+06-21-16  12:00AM            112876474 20160621.000001.tar.gz
+06-26-16  12:01AM               682409 20160626.000001.sql.gz
+06-26-16  12:01AM            112896830 20160626.000001.tar.gz
+lftp ftp@ftpserver:/WEBSRV/site1>
+lftp ftp@ftpserver:/WEBSRV/site1> get 20160626.000001.sql.gz 20160626.000001.tar.gz
+113579239 байтов перемещено за 1 секунду (91.41Мб/с)
+Всего перемещено: 2 файла
+lftp ftp@ftpserver:/WEBSRV/site1>
+lftp ftp@ftpserver:/WEBSRV/site1> bye
+[root@websrv site1]# cd htdocs/
+[root@websrv htdocs]# tar -zxvf ../20160626.000001.tar.gz
+[root@websrv htdocs]# rm -rf /var/www/vhosts/site1/htdocs*
+[root@websrv htdocs]# cp -R ./* /var/www/vhosts/site1/htdocs/
+[root@websrv htdocs]# source /var/www/webbackup/configs/site1.conf
+[root@websrv htdocs]# chmod 775 -R /var/www/vhosts/site1/htdocs
+[root@websrv htdocs]# chown site1:nginx -R /var/www/vhosts/site1/htdocs
+[root@websrv htdocs]# cd ..
+[root@websrv site1]# zcat 20160626.000001.sql.gz |  mysql -u $sqluser -p$sqlpass $dbname
+[root@websrv site1]# cd /
+[root@websrv /]# rm -rf /tmp/site1/*
